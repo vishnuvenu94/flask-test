@@ -26,4 +26,4 @@ def handleEvents():
 
 if __name__ == "__main__":
     # app.run(debug=True)
-    serve(app, listen='*:{}'.format(str(PORT) or "3000"))
+    serve(app, listen='*:{}'.format(str(PORT)))
