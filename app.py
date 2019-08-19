@@ -16,6 +16,9 @@ def entry():
 @app.route("/events", methods=['POST'])
 def handleEvents():
     print(request)
+    file = open("myfile.txt", "w+")
+    file.write(json.dumps(request.json))
+    file.close()
     return json.dumps(request.json)
 
 
