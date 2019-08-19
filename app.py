@@ -7,6 +7,7 @@ import os
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
+PORT = 8080
 
 
 @app.route("/")
