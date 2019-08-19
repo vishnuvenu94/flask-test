@@ -12,5 +12,10 @@ def entry():
     return "working"
 
 
+@app.route("/events", methods=['POST'])
+def handleEvents():
+    print(jsonify(request))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
