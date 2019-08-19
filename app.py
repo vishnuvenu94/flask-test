@@ -15,7 +15,7 @@ def entry():
 @app.route("/events", methods=['POST'])
 def handleEvents():
     print(request)
-    return request
+    return "working"
 
 
 if __name__ == "__main__":
