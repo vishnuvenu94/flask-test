@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import json
+from waitress import serve
 
 # from flask_marshmallow import marshmalllow
 import os
@@ -23,4 +24,5 @@ def handleEvents():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    serve(app, listen='*:{}'.format(str(PORT) or "3000"))
