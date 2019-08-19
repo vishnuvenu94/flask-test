@@ -16,7 +16,7 @@ def entry():
 @app.route("/events", methods=['POST'])
 def handleEvents():
     print(request)
-    return json.dump(request)
+    return json.dumps(request)
 
 
 if __name__ == "__main__":
