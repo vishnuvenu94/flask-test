@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import json
 
 # from flask_marshmallow import marshmalllow
 import os
@@ -15,7 +16,7 @@ def entry():
 @app.route("/events", methods=['POST'])
 def handleEvents():
     print(request)
-    return "working"
+    return json.dump(request)
 
 
 if __name__ == "__main__":
