@@ -10,7 +10,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 PORT = 8080
 
-graphqlClient = GraphQLClient(os.environ['HASURA_GRAPHQL_URL'])
+graphqlClient = GraphQLClient("https://hasura-sa.cap.jaagalabs.com/v1/graphql")
 graphqlClient.inject_token(
     os.environ['HASURA_GRAPHQL_ADMIN_SECRET'], 'x-hasura-admin-secret')
 
