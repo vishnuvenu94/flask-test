@@ -135,7 +135,7 @@ def handleEvents():
     # file.close()
     # return json.dumps(request.json)
 
-    notification_payload = json.loads(request)
+    notification_payload = request
     print(notification_payload, "notification payload",
           type(notification_payload))
     problem_id = notification_payload["event"]["data"]["new"]["id"]
