@@ -2,15 +2,16 @@ from flask import Flask, request, jsonify
 import json
 from waitress import serve
 from graphqlclient import GraphQLClient
+import os
 
 
 app = Flask(__name__)
 
 PORT = 8080
 
-graphqlClient = GraphQLClient("https://hasura-sa.cap.jaagalabs.com/v1/graphql")
+graphqlClient = GraphQLClient(os.environ['HASURA_GRAPHQL_URL'])
 graphqlClient.inject_token(
-    "1SocialAlpha", 'x-hasura-admin-secret')
+    os.environ['HASURA_GRAPHQL_ADMIN_SECRET'], 'x-hasura-admin-secret')
 
 
 notifications_insert_mutation = '''
