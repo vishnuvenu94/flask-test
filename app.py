@@ -34,12 +34,12 @@ def entry():
     return "working"
 
 
-@app.route("/problems", methods=['POST'])
-def handle_problem_events():
+@app.route("/problems/insert", methods=['POST'])
+def handle_problem_insert():
 
-    users_to_notify_on_update = []
+    # users_to_notify_on_update = []
     problem_insert_notifications = []
-    problem_update_notifications = []
+    # problem_update_notifications = []
 
     # print(request.json, "====request", type(request.json))
 
@@ -50,8 +50,7 @@ def handle_problem_events():
     # print("problem id==========", problem_id)
     user_id = trigger_payload["event"]["data"]["new"]["user_id"]
 
-    if trigger_payload["event"]["op"] == "INSERT":
-        problems_insert_query = '''
+    problems_insert_query = '''
             {
               problems(where:{id:{_eq:%s}}){
                problems_tags{
@@ -64,25 +63,39 @@ def handle_problem_events():
               }
              }
             }''' % (problem_id)
-        problem_insert_query_data = json.loads(graphqlClient.execute(problems_insert_query))[
-            "data"]["problems"][0]
-        for item, values in problem_insert_query_data.items():
+    problem_insert_query_data = json.loads(graphqlClient.execute(problems_insert_query))[
+        "data"]["problems"][0]
+    for item, values in problem_insert_query_data.items():
 
             # print(item, "item", values)
-            for tags in values:
-                for tag in tags["tag"]["users_tags"]:
-                    # print(tag, "tag")
-                    if(tag["user_id"] != user_id):
+        for tags in values:
 
-                        problem_insert_notifications.append(
-                            {"user_id": tag["user_id"], "tag_id": tag["tag_id"], "problem_id": problem_id})
+            for tag in tags["tag"]["users_tags"]:
+                    # print(tag, "tag")
+                if(tag["user_id"] != user_id):
+
+                    problem_insert_notifications.append(
+                        {"user_id": tag["user_id"], "tag_id": tag["tag_id"], "problem_id": problem_id})
         print("user to notify ========", problem_insert_notifications)
-        try:
-            graphqlClient.execute(notifications_insert_mutation, {
-                'objects': list(problem_insert_notifications)})
-        except:
-            pass
-    elif (trigger_payload["event"]["op"] == "UPDATE"):
+    try:
+        graphqlClient.execute(notifications_insert_mutation, {
+            'objects': list(problem_insert_notifications)})
+    except:
+        pass
+
+    return "working"
+
+
+@app.route("/problems/update", methods=['POST'])
+def handle_problem_update():
+    users_to_notify_on_update = []
+    problem_update_notifications = []
+    trigger_payload = request.json
+    problem_id = trigger_payload["event"]["data"]["new"]["id"]
+
+    user_id = trigger_payload["event"]["data"]["new"]["user_id"]
+
+    if (trigger_payload["event"]["op"] == "UPDATE" and not trigger_payload["event"]["data"]["new"]["is_draft"]):
 
         problems_update_query = '''
                         {
