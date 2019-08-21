@@ -122,8 +122,8 @@ def entry():
 
     # d = json.loads(json_acceptable_string)
     # print(d["data"]["problems"])
-    graphqlClient.execute(notifications_insert_mutation, {
-        'objects': list(test)})
+    # graphqlClient.execute(notifications_insert_mutation, {
+    #     'objects': list(test)})
 
     # file.close()
 
