@@ -141,7 +141,7 @@ def handleEvents():
     problem_id = notification_payload["event"]["data"]["new"]["id"]
     user_id = notification_payload["event"]["data"]["new"]["user_id"]
 
-    if notification_payload["event"]["op"] == "INSERT":
+    if notification_payload["event"]["op"] == "INSERT" or "UPDATE":
         problems_insert_query = '''
             {
               problems(where:{id:{_eq:%s}}){
