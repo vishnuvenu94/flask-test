@@ -167,6 +167,7 @@ def handleEvents():
                     # print(tag, "tag")
                     users_to_notify.append(
                         {"user_id": tag["user_id"], "tag_id": tag["tag_id"], "problem_id": problem_id})
+        print("user to notify ========", users_to_notify)
         graphqlClient.execute(notifications_insert_mutation, {
             'objects': list(users_to_notify)})
 
