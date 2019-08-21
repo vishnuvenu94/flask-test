@@ -16,22 +16,22 @@ graphqlClient.inject_token(
 
 user_id = 12
 
-# problems = [
-#     {
-#         "title": "flask test 10",
-#         "description": "Sample article content",
-#         "user_id": 5,
-#         "max_population": 2323,
-#         "organization": "wewe"
-#     },
-#     {
-#         "title": "flask test 12",
-#         "description": "Sample article content",
-#         "user_id": 5,
-#         "max_population": 2323,
-#         "organization": "wewe"
-#     }
-# ]
+problems = [
+    {
+        "title": "flask test 10",
+        "description": "Sample article content",
+        "user_id": 5,
+        "max_population": 2323,
+        "organization": "wewe"
+    },
+    {
+        "title": "flask test 12",
+        "description": "Sample article content",
+        "user_id": 5,
+        "max_population": 2323,
+        "organization": "wewe"
+    }
+]
 
 problems_update_query = '''
     {
@@ -112,8 +112,8 @@ def entry():
     # print(json.loads(graphqlClient.execute(query)))
     # print(mutation)
     # graphqlClient.execute(problems_insert_mutation)
-    # graphqlClient.execute(problems_insert_mutation, {
-    #                       'objects': list(problems)})
+    graphqlClient.execute(problems_insert_mutation, {
+                          'objects': list(problems)})
 
     # json_acceptable_string = payload.replace("'", "\"")
 
