@@ -16,22 +16,22 @@ graphqlClient.inject_token(
 
 user_id = 12
 
-problems = [
-    {
-        "title": "flask test 8",
-        "description": "Sample article content",
-        "user_id": 5,
-        "max_population": 2323,
-        "organization": "wewe"
-    },
-    {
-        "title": "flask test 9",
-        "description": "Sample article content",
-        "user_id": 5,
-        "max_population": 2323,
-        "organization": "wewe"
-    }
-]
+# problems = [
+#     {
+#         "title": "flask test 10",
+#         "description": "Sample article content",
+#         "user_id": 5,
+#         "max_population": 2323,
+#         "organization": "wewe"
+#     },
+#     {
+#         "title": "flask test 12",
+#         "description": "Sample article content",
+#         "user_id": 5,
+#         "max_population": 2323,
+#         "organization": "wewe"
+#     }
+# ]
 
 problems_update_query = '''
     {
@@ -73,8 +73,8 @@ problems_insert_query = '''
     }
     }'''
 
-test = json.dumps(problems)
-print(test)
+# test = json.dumps(problems)
+# print(test)
 
 
 notifications_insert_mutation = '''
@@ -112,8 +112,8 @@ def entry():
     # print(json.loads(graphqlClient.execute(query)))
     # print(mutation)
     # graphqlClient.execute(problems_insert_mutation)
-    graphqlClient.execute(problems_insert_mutation, {
-                          'objects': list(problems)})
+    # graphqlClient.execute(problems_insert_mutation, {
+    #                       'objects': list(problems)})
 
     # json_acceptable_string = payload.replace("'", "\"")
 
@@ -136,6 +136,8 @@ def handleEvents():
     # return json.dumps(request.json)
 
     notification_payload = json.dumps(request.json)
+    print(notification_payload, "notification payload",
+          type(notification_payload))
     problem_id = notification_payload["event"]["data"]["new"]["id"]
     user_id = notification_payload["event"]["data"]["new"]["user_id"]
 
