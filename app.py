@@ -140,5 +140,5 @@ def handle_problem_update():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    # serve(app, listen='*:{}'.format(str(PORT)))
+    # app.run(debug=True)
+    serve(app, listen='*:{}'.format(str(PORT)))
