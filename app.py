@@ -99,7 +99,7 @@ def handle_problem_update():
 
         problems_update_query = '''
                         {
-             problems(where:{id:{_eq:%s}}){
+            problems(where:{id:{_eq:%s}}){
 
             problem_owners{
             user_id
@@ -120,7 +120,7 @@ def handle_problem_update():
         ''' % (problem_id)
         problem_update_query_data = json.loads(graphqlClient.execute(problems_update_query))[
             "data"]["problems"][0]
-        for item, values in problem_update_query_data .items():
+        for item, values in problem_update_query_data.items():
             for value in values:
 
                 users_to_notify_on_update.append(value["user_id"])
@@ -129,6 +129,7 @@ def handle_problem_update():
         for user in users_to_notify_on_update:
             notifification_entry = {"user_id": user, "problem_id": problem_id}
             problem_update_notifications.append(notifification_entry)
+        print("users on update===", problem_update_notifications)
         try:
             graphqlClient.execute(notifications_insert_mutation, {
                 'objects': list(problem_update_notifications)})
