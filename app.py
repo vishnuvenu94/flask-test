@@ -208,6 +208,7 @@ def handle_problem_event_trigger():
                 'objects': list(problem_update_notifications)})
         except:
             pass
+    return "working"
 
 
 if __name__ == "__main__":
