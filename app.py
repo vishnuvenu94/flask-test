@@ -140,6 +140,7 @@ def handleEvents():
     print(notification_payload, "notification payload",
           type(notification_payload))
     problem_id = notification_payload["event"]["data"]["new"]["id"]
+    print("problem id==========", problem_id)
     user_id = notification_payload["event"]["data"]["new"]["user_id"]
 
     if notification_payload["event"]["op"] == "INSERT" or "UPDATE":
