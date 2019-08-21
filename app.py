@@ -112,8 +112,8 @@ def entry():
     # print(json.loads(graphqlClient.execute(query)))
     # print(mutation)
     # graphqlClient.execute(problems_insert_mutation)
-    graphqlClient.execute(problems_insert_mutation, {
-                          'objects': list(problems)})
+    # graphqlClient.execute(problems_insert_mutation, {
+    #                       'objects': list(problems)})
 
     # json_acceptable_string = payload.replace("'", "\"")
 
