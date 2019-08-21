@@ -134,6 +134,7 @@ def handleEvents():
     # file.write(json.dumps(request.json))
     # file.close()
     # return json.dumps(request.json)
+    print(request, "====request", type(request))
 
     notification_payload = request
     print(notification_payload, "notification payload",
