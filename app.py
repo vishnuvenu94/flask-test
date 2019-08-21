@@ -105,7 +105,7 @@ mutation insert_problems($objects: [problems_insert_input!]! ) {
 '''
 
 test = [{"problem_id": 69, "user_id": 5, "tag_id": 4},
-    {"problem_id": 69, "user_id": 5, "tag_id": 3}]
+        {"problem_id": 69, "user_id": 5, "tag_id": 3}]
 # .replace('$problems', json.dumps([{"title": "from flask api", "description": "ddasdasd", "max_population": 21, "user_id": 5}]))
 
 
@@ -122,8 +122,8 @@ def entry():
 
     # d = json.loads(json_acceptable_string)
     # print(d["data"]["problems"])
-     graphqlClient.execute(notifications_insert_mutation, {
-            'objects': list(test)})
+    graphqlClient.execute(notifications_insert_mutation, {
+        'objects': list(test)})
 
     # file.close()
 
