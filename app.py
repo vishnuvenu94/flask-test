@@ -36,7 +36,7 @@ problems = [
 problems_update_query = '''
     {
     problems(where:{id:{_eq:%s}}){
-    
+
      problem_owners{
       user_id
     }
@@ -49,8 +49,8 @@ problems_update_query = '''
     problem_collaborators{
       user_id
     }
-    
-      
+
+
     }
     }
     ''' % user_id
@@ -66,10 +66,10 @@ problems_insert_query = '''
           }
         }
       }
-      
-   
-    
-      
+
+
+
+
     }
     }'''
 
@@ -98,11 +98,14 @@ mutation insert_problems($objects: [problems_insert_input!]! ) {
     ) {
         returning {
             id
-            
+
         }
     }
 }
 '''
+
+test = [{"problem_id": 69, "user_id": 5, "tag_id": 4},
+    {"problem_id": 69, "user_id": 5, "tag_id": 3}]
 # .replace('$problems', json.dumps([{"title": "from flask api", "description": "ddasdasd", "max_population": 21, "user_id": 5}]))
 
 
@@ -119,6 +122,8 @@ def entry():
 
     # d = json.loads(json_acceptable_string)
     # print(d["data"]["problems"])
+     graphqlClient.execute(notifications_insert_mutation, {
+            'objects': list(test)})
 
     # file.close()
 
