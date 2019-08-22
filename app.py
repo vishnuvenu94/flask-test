@@ -143,7 +143,7 @@ def handle_problem_update():
         ''' % (problem_id)
         handle_notifications(trigger_payload, "problems",
                              problems_update_query, problem_id)
-        print("====in")
+        # print("====in")
         # problem_update_query_data = json.loads(graphqlClient.execute(problems_update_query))[
         #     "data"]["problems"][0]
         # for item, values in problem_update_query_data.items():
@@ -162,6 +162,37 @@ def handle_problem_update():
         # except:
         #     pass
     return "working"
+
+
+@app.route("/problems/collaboration", methods=['POST'])
+def handle_problem_collaboration():
+
+    trigger_payload = request.json
+    problem_id = trigger_payload["event"]["data"]["new"]["problem_id"]
+    user_id = trigger_payload["event"]["data"]["new"]["user_id"]
+    problems_update_query = '''
+                        {
+            problems(where:{id:{_eq:%s}}){
+
+            problem_owners{
+            user_id
+            }
+            problem_watchers{
+            user_id
+            }
+            problem_validations{
+            user_id
+            }
+            problem_collaborators{
+            user_id
+            }
+
+
+            }
+            }
+        ''' % (problem_id)
+    handle_notifications(trigger_payload, "problem_collaborators",
+                         problems_update_query, problem_id, user_id, "collaborator")
 
 
 if __name__ == "__main__":
