@@ -36,7 +36,10 @@ def handle_notifications(trigger_payload, table, query, problem_id, user_id=0, n
     for item, values in query_data.items():
         for value in values:
             users_to_notify.append(value["user_id"])
-    users_to_notify = list(set(users_to_notify))
+    users_to_notify = set(users_to_notify)
+    if user_id in users_to_notify:
+        users_to_notify.remove(user_id)
+
     for user in users_to_notify:
         notifification_entry = {"user_id": user, "problem_id": problem_id}
         if user_id:
