@@ -191,7 +191,7 @@ def handle_problem_collaboration():
             }
             }
         ''' % (problem_id)
-    handle_notifications(trigger_payload, "problem_collaborators",
+    handle_notifications(trigger_payload, "problems",
                          problems_update_query, problem_id, user_id, "collaborator")
 
 
