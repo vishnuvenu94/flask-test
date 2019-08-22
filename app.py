@@ -27,6 +27,29 @@ mutation insert_notifications($objects: [notifications_insert_input!]! ) {
 '''
 
 
+def handle_notifications(trigger_payload, table, query, problem_id, user_id=0, notification_type=""):
+    users_to_notify = []
+    notifications = []
+
+    query_data = json.loads(graphqlClient.execute(query))[
+        "data"][table][0]
+    for item, values in query_data.items():
+        for value in values:
+            users_to_notify.append(value["user_id"])
+    users_to_notify = list(set(users_to_notify))
+    for user in users_to_notify:
+        notifification_entry = {"user_id": user, "problem_id": problem_id}
+        if user_id:
+            notifification_entry[notification_type] = user_id
+        notifications.append(notifification_entry)
+
+    try:
+        graphqlClient.execute(notifications_insert_mutation, {
+            'objects': list(notifications)})
+    except:
+        pass
+
+
 @app.route("/")
 def entry():
 
@@ -88,8 +111,8 @@ def handle_problem_insert():
 
 @app.route("/problems/update", methods=['POST'])
 def handle_problem_update():
-    users_to_notify_on_update = []
-    problem_update_notifications = []
+    # users_to_notify_on_update = []
+    # problem_update_notifications = []
     trigger_payload = request.json
     problem_id = trigger_payload["event"]["data"]["new"]["id"]
 
@@ -118,23 +141,25 @@ def handle_problem_update():
             }
             }
         ''' % (problem_id)
-        problem_update_query_data = json.loads(graphqlClient.execute(problems_update_query))[
-            "data"]["problems"][0]
-        for item, values in problem_update_query_data.items():
-            for value in values:
+        handle_notifications(trigger_payload, "problems",
+                             problems_update_query, problem_id)
+        # problem_update_query_data = json.loads(graphqlClient.execute(problems_update_query))[
+        #     "data"]["problems"][0]
+        # for item, values in problem_update_query_data.items():
+        #     for value in values:
 
-                users_to_notify_on_update.append(value["user_id"])
+        #         users_to_notify_on_update.append(value["user_id"])
 
-        users_to_notify_on_update = list(set(users_to_notify_on_update))
-        for user in users_to_notify_on_update:
-            notifification_entry = {"user_id": user, "problem_id": problem_id}
-            problem_update_notifications.append(notifification_entry)
-        print("users on update===", problem_update_notifications)
-        try:
-            graphqlClient.execute(notifications_insert_mutation, {
-                'objects': list(problem_update_notifications)})
-        except:
-            pass
+        # users_to_notify_on_update = list(set(users_to_notify_on_update))
+        # for user in users_to_notify_on_update:
+        #     notifification_entry = {"user_id": user, "problem_id": problem_id}
+        #     problem_update_notifications.append(notifification_entry)
+        # print("users on update===", problem_update_notifications)
+        # try:
+        #     graphqlClient.execute(notifications_insert_mutation, {
+        #         'objects': list(problem_update_notifications)})
+        # except:
+        #     pass
     return "working"
 
 
