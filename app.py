@@ -42,7 +42,7 @@ def handle_notifications(trigger_payload, table, query, problem_id, user_id=0, n
         if user_id:
             notifification_entry[notification_type] = user_id
         notifications.append(notifification_entry)
-
+    print(notifications, "=====notifications")
     try:
         graphqlClient.execute(notifications_insert_mutation, {
             'objects': list(notifications)})
