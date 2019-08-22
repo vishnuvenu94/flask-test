@@ -143,6 +143,7 @@ def handle_problem_update():
         ''' % (problem_id)
         handle_notifications(trigger_payload, "problems",
                              problems_update_query, problem_id)
+        print("====in")
         # problem_update_query_data = json.loads(graphqlClient.execute(problems_update_query))[
         #     "data"]["problems"][0]
         # for item, values in problem_update_query_data.items():
