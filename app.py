@@ -27,6 +27,31 @@ mutation insert_notifications($objects: [notifications_insert_input!]! ) {
 '''
 
 
+def get_problem_query(problem_id):
+    problems_query = '''
+                        {
+            problems(where:{id:{_eq:%s}}){
+
+            problem_owners{
+            user_id
+            }
+            problem_watchers{
+            user_id
+            }
+            problem_validations{
+            user_id
+            }
+            problem_collaborators{
+            user_id
+            }
+
+
+            }
+            }
+        ''' % (problem_id)
+    return problems_query
+
+
 def handle_notifications(trigger_payload, table, query, problem_id, user_id=0, notification_type=""):
     users_to_notify = []
     notifications = []
@@ -123,29 +148,9 @@ def handle_problem_update():
 
     if (trigger_payload["event"]["op"] == "UPDATE" and not trigger_payload["event"]["data"]["new"]["is_draft"]):
 
-        problems_update_query = '''
-                        {
-            problems(where:{id:{_eq:%s}}){
-
-            problem_owners{
-            user_id
-            }
-            problem_watchers{
-            user_id
-            }
-            problem_validations{
-            user_id
-            }
-            problem_collaborators{
-            user_id
-            }
-
-
-            }
-            }
-        ''' % (problem_id)
+        query = get_problem_query(problem_id)
         handle_notifications(trigger_payload, "problems",
-                             problems_update_query, problem_id)
+                             query, problem_id)
         # print("====in")
         # problem_update_query_data = json.loads(graphqlClient.execute(problems_update_query))[
         #     "data"]["problems"][0]
@@ -173,29 +178,22 @@ def handle_problem_collaboration():
     trigger_payload = request.json
     problem_id = trigger_payload["event"]["data"]["new"]["problem_id"]
     user_id = trigger_payload["event"]["data"]["new"]["user_id"]
-    problems_update_query = '''
-                        {
-            problems(where:{id:{_eq:%s}}){
+    query = get_problem_query(problem_id)
 
-            problem_owners{
-            user_id
-            }
-            problem_watchers{
-            user_id
-            }
-            problem_validations{
-            user_id
-            }
-            problem_collaborators{
-            user_id
-            }
-
-
-            }
-            }
-        ''' % (problem_id)
     handle_notifications(trigger_payload, "problems",
-                         problems_update_query, problem_id, user_id, "collaborator")
+                         query, problem_id, user_id, "collaborator")
+
+
+@app.route("/problems/validation", methods=['POST'])
+def handle_problem_validation():
+
+    trigger_payload = request.json
+    problem_id = trigger_payload["event"]["data"]["new"]["problem_id"]
+    user_id = trigger_payload["event"]["data"]["new"]["user_id"]
+    query = get_problem_query(problem_id)
+
+    handle_notifications(trigger_payload, "problems",
+                         query, problem_id, user_id, "validated_by")
 
 
 if __name__ == "__main__":
