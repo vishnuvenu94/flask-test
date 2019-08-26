@@ -239,6 +239,31 @@ def handle_enrichment_insert():
     return "working"
 
 
+@app.route("/discussion_mentions", methods=['POST'])
+def handle_discussion_mentions():
+    trigger_payload = request.json
+    user_to_be_notified = trigger_payload["event"]["data"]["new"]["user_id"]
+    discussion_id = trigger_payload["event"]["data"]["new"]["discussion_id"]
+    query = '''{
+           discussion_mentions(where:{discussion_id:{_eq:%s}}){
+            discussion{
+              id
+              problem{
+                id
+              }
+            }
+          }
+            }''' % (discussion_id)
+    problem_id = json.loads(graphqlClient.execute(query))[
+        "data"]["discussion_mentions"][0]["discussion"]["problem"]["id"]
+    notification=[{"user_id":user_to_be_notified,"problem_id":problem_id,"discussion_id":discussion_id}]
+    try:
+        graphqlClient.execute(notifications_insert_mutation, {
+            'objects': list(notification)})
+    except:
+        pass
+    return "working"
+
 # @app.route("/solutions/insert", methods=['POST'])
 # def handle_solution_insert():
 #     users_to_notify = {}
