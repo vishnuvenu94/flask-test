@@ -267,18 +267,14 @@ def handle_enrichment_insert():
 
 #             user_id
 #             problem_id
-
 #           }
 #           problem_collaborators{
 #             problem_id
 #             user_id
-
 #           }
 #         }
 #       }
-
 #     }
-
 #   }''' % (solution_id)
 #     query_data = json.loads(graphqlClient.execute(solution_insert_query))[
 #         "data"]["solutions"][0]["problems_solutions"]
