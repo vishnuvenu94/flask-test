@@ -440,8 +440,8 @@ def handle_solution_validation():
     user_id = trigger_payload["event"]["data"]["new"]["user_id"]
     query = get_solution_update_query(solution_id)
 
-    handle_notifications(trigger_payload, "solutions",
-                         query, solution_id, user_id, "validated_by")
+    handle_solution_notifications(trigger_payload, "solutions",
+                                  query, solution_id, user_id, "validated_by")
     return "working"
 
 
