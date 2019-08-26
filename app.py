@@ -260,6 +260,7 @@ def handle_discussion_mentions():
     notification_object = {"user_id": user_to_be_notified,
                            "problem_id": problem_id, "discussion_id": discussion_id}
     notification.append(notification_object)
+    print("notification", notification)
     try:
         graphqlClient.execute(notifications_insert_mutation, {
             'objects': list(notification)})
