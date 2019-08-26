@@ -256,7 +256,10 @@ def handle_discussion_mentions():
             }''' % (discussion_id)
     problem_id = json.loads(graphqlClient.execute(query))[
         "data"]["discussion_mentions"][0]["discussion"]["problem"]["id"]
-    notification=[{"user_id":user_to_be_notified,"problem_id":problem_id,"discussion_id":discussion_id}]
+    notification = []
+    notification_object = {"user_id": user_to_be_notified,
+                           "problem_id": problem_id, "discussion_id": discussion_id}
+    notification.append(notification_object)
     try:
         graphqlClient.execute(notifications_insert_mutation, {
             'objects': list(notification)})
