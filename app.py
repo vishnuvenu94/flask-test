@@ -347,6 +347,7 @@ def handle_solution_insert():
             'objects': list(notifications)})
     except:
         pass
+    return "working"
 
 
 if __name__ == "__main__":
