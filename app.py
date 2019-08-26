@@ -268,71 +268,87 @@ def handle_discussion_mentions():
         pass
     return "working"
 
-# @app.route("/solutions/insert", methods=['POST'])
-# def handle_solution_insert():
-#     users_to_notify = {}
-#     notifications = []
-#     trigger_payload = request.json
-#     solution_id = trigger_payload["event"]["data"]["new"]["id"]
-#     user_id = trigger_payload["event"]["data"]["new"]["user_id"]
-#     solution_insert_query = '''query{
-#     solutions(where:{id:{_eq:%s}}){
+
+@app.route("/solutions/insert", methods=['POST'])
+def handle_solution_insert():
+    users_to_notify = {}
+    notifications = []
+    trigger_payload = request.json
+    solution_id = trigger_payload["event"]["data"]["new"]["id"]
+    user_id = trigger_payload["event"]["data"]["new"]["user_id"]
+    solution_insert_query = '''query{
+    solutions(where:{id:{_eq:%s}}){
 
 
-#       problems_solutions{
-#         problem{
-#           problem_owners{
-#             user_id
-#             problem_id
+      problems_solutions{
+        problem{
+          problem_owners{
+            user_id
+            problem_id
 
-#           }
-#           problem_watchers{
+          }
+          problem_watchers{
 
-#             user_id
-#             problem_id
+            user_id
+            problem_id
 
-#           }
-#           problem_validations{
+          }
+          problem_validations{
 
-#             user_id
-#             problem_id
+            user_id
+            problem_id
 
-#           }
-#           problem_collaborators{
-#             problem_id
-#             user_id
+          }
+          problem_collaborators{
+            problem_id
+            user_id
 
-#           }
-#         }
-#       }
+          }
+        }
+      }
 
-#     }
+    }
 
-#   }''' % (solution_id)
-#     query_data = json.loads(graphqlClient.execute(solution_insert_query))[
-#         "data"]["solutions"][0]["problems_solutions"]
-#     for item, values in query_data.items():
-#         for value in values:
-#             for item, users in value["problem"]:
-#                 for user in users:
-#                     users_to_notify["{}+{}".format(user.user_id,
-#                                                    user.problem_id)] = user
-#     print("users to notify=====", users_to_notify)
-#     # users_to_notify.append(value["user_id"])
-#     users_to_notify = set(users_to_notify)
-#     if user_id in users_to_notify:
-#         users_to_notify.remove(user_id)
-#     for user in users_to_notify:
-#         notifification_entry = {"user_id": user, "problem_id": problem_id}
-#         if user_id:
-#             notifification_entry[notification_type] = user_id
-#         notifications.append(notifification_entry)
-#     print(notifications, "=====notifications")
-#     try:
-#         graphqlClient.execute(notifications_insert_mutation, {
-#             'objects': list(notifications)})
-#     except:
-#         pass
+  }''' % (solution_id)
+    query_data = json.loads(graphqlClient.execute(solution_insert_query))[
+        "data"]["solutions"][0]["problems_solutions"]
+    # for item, values in query_data.items():
+    #     for value in values:
+    #         for item, users in value["problem"]:
+    #             for user in users:
+    #                 users_to_notify["{}+{}".format(user.user_id,
+    #                                                user.problem_id)] = user
+    for problems in query_data:
+
+        for item, users in problems["problem"].items():
+
+            for user in users:
+                # print(user, "user")
+                if bool(user):
+                    print(user)
+
+                    users_to_notify["{}".format(str(user["user_id"]) + "-" +
+                                                str(user["problem_id"]))] = user
+
+    print("users to notify=====", users_to_notify)
+
+    for items, user in users_to_notify.items():
+        # users_to_notify.remove(user_id)
+        if user["user_id"] == user_id:
+            del user
+    for item, user in users_to_notify.items():
+        notifification_entry = {
+            "user_id": user["user_id"], "problem_id": user["problem_id"], "solution_id": solution_id}
+
+        notifications.append(notifification_entry)
+    print(notifications, "=====notifications")
+    try:
+        graphqlClient.execute(notifications_insert_mutation, {
+            'objects': list(notifications)})
+    except:
+        pass
+
+
 if __name__ == "__main__":
     app.run(debug=True)
     # serve(app, listen='*:{}'.format(str(PORT)))
