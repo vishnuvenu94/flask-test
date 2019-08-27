@@ -9,9 +9,9 @@ app = Flask(__name__)
 
 PORT = 8080
 
-graphqlClient = GraphQLClient(os.environ['HASURA_GRAPHQL_URL'])
+graphqlClient = GraphQLClient("https://hasura-sa.cap.jaagalabs.com/v1/graphql")
 graphqlClient.inject_token(
-    os.environ['HASURA_GRAPHQL_ADMIN_SECRET'], 'x-hasura-admin-secret')
+    "1SocialAlpha", 'x-hasura-admin-secret')
 
 
 notifications_insert_mutation = '''
@@ -448,5 +448,5 @@ def handle_solution_validation():
 
 
 if __name__ == "__main__":
-    # app.run(debug=True)
-    serve(app, listen='*:{}'.format(str(PORT)))
+    app.run(debug=True)
+    # serve(app, listen='*:{}'.format(str(PORT)))
