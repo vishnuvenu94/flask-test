@@ -111,9 +111,9 @@ def get_enrichment_query(enrichment_id):
 
 
 def add_owner(user_id, id, type):
-    owner=[]
-    owner_insert_mutation = '''mutation insert_{}_owners($objects: [{}_owners_insert_input!]! ) {
-    insert_{}_owners(
+    owner = []
+    owner_insert_mutation = '''mutation insert_%s_owners($objects: [%d_owners_insert_input!]! ) {
+    insert_%e_owners(
         objects:$objects
     ) {
         returning {
@@ -121,8 +121,9 @@ def add_owner(user_id, id, type):
             user_id
         }
     }
-}'''.format(type, type, type)
-    owner_object={"users_id":user_id,"{}_id".format(type):id}
+}
+''' % (type, type, type)
+    owner_object = {"users_id": user_id, "{}_id".format(type): id}
     owner.append(owner_object)
     try:
         graphqlClient.execute(owner_insert_mutation, {
@@ -236,7 +237,7 @@ def handle_problem_insert():
 
     user_id = trigger_payload["event"]["data"]["new"]["user_id"]
 
-    add_owner(user_id,problem_id,"problem")
+    add_owner(user_id, problem_id, "problem")
 
     problems_insert_query = '''
             {
@@ -362,8 +363,7 @@ def handle_solution_insert():
     solution_id = trigger_payload["event"]["data"]["new"]["id"]
     user_id = trigger_payload["event"]["data"]["new"]["user_id"]
 
-    add_owner(user_id,solution_id,"solution")
-
+    add_owner(user_id, solution_id, "solution")
 
     solution_insert_query = '''query{
     solutions(where:{id:{_eq:%s}}){
