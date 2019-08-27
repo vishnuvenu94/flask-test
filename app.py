@@ -118,7 +118,7 @@ def add_owner(user_id, id, type):
         objects:$objects
     ) {
         returning {
-            id
+            
             user_id
         }
     }
