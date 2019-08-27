@@ -20,7 +20,7 @@ mutation insert_notifications($objects: [notifications_insert_input!]! ) {
         objects:$objects
     ) {
         returning {
-            id
+            
             user_id
         }
     }
