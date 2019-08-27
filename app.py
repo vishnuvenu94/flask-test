@@ -112,8 +112,8 @@ def get_enrichment_query(enrichment_id):
 
 def add_owner(user_id, id, type):
     owner = []
-    owner_insert_mutation = '''mutation insert_%s_owners($objects: [%d_owners_insert_input!]! ) {
-    insert_%e_owners(
+    owner_insert_mutation = '''mutation insert_%s_owners($objects: [%s_owners_insert_input!]! ) {
+    insert_%s_owners(
         objects:$objects
     ) {
         returning {
