@@ -125,7 +125,7 @@ def add_owner(user_id, id, type):
 ''' % (type, type, type)
     owner_object = {"user_id": user_id, "{}_id".format(type): id}
     owner.append(owner_object)
-    print(owner,"query=="owner_insert_mutation)
+    print(owner, "query==", owner_insert_mutation)
     try:
         graphqlClient.execute(owner_insert_mutation, {
             'objects': list(owner)})
