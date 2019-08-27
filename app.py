@@ -110,6 +110,27 @@ def get_enrichment_query(enrichment_id):
     return enrichments_query
 
 
+def add_owner(user_id, id, type):
+    owner=[]
+    owner_insert_mutation = '''mutation insert_{}_owners($objects: [{}_owners_insert_input!]! ) {
+    insert_{}_owners(
+        objects:$objects
+    ) {
+        returning {
+            id
+            user_id
+        }
+    }
+}'''.format(type, type, type)
+    owner_object={"users_id":user_id,"{}_id".format(type):id}
+    owner.append(owner_object)
+    try:
+        graphqlClient.execute(owner_insert_mutation, {
+            'objects': list(owner)})
+    except:
+        pass
+
+
 def handle_notifications(trigger_payload, table, query, problem_id, user_id=None, notification_type=None):
     users_to_notify = []
     notifications = []
@@ -214,6 +235,8 @@ def handle_problem_insert():
     problem_id = trigger_payload["event"]["data"]["new"]["id"]
 
     user_id = trigger_payload["event"]["data"]["new"]["user_id"]
+
+    add_owner(user_id,problem_id,"problem")
 
     problems_insert_query = '''
             {
@@ -338,6 +361,10 @@ def handle_solution_insert():
     trigger_payload = request.json
     solution_id = trigger_payload["event"]["data"]["new"]["id"]
     user_id = trigger_payload["event"]["data"]["new"]["user_id"]
+
+    add_owner(user_id,solution_id,"solution")
+
+
     solution_insert_query = '''query{
     solutions(where:{id:{_eq:%s}}){
 
