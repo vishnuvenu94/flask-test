@@ -158,7 +158,7 @@ def handle_solution_notifications(trigger_payload, table, query, solution_id, us
         if user_id and notification_type:
             notifification_entry[notification_type] = user_id
         else:
-            notifification_entry["is_update"] = true
+            notifification_entry["is_update"] = True
         # if solution_id:
         #     notifification_entry["solution_id"] = solution_id
         notifications.append(notifification_entry)
