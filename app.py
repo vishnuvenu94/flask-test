@@ -123,7 +123,7 @@ def add_owner(user_id, id, type):
     }
 }
 ''' % (type, type, type)
-    owner_object = {"users_id": user_id, "{}_id".format(type): id}
+    owner_object = {"user_id": user_id, "{}_id".format(type): id}
     owner.append(owner_object)
     print(owner)
     try:
