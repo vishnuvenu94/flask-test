@@ -112,9 +112,9 @@ def get_enrichment_query(enrichment_id):
 
 
 def add_owner(user_id, id, type):
-    owner=[]
-    owner_insert_mutation = '''mutation insert_{}_owners($objects: [{}_owners_insert_input!]! ) {
-    insert_{}_owners(
+    owner = []
+    owner_insert_mutation = '''mutation insert_%s_owners($objects: [%s_owners_insert_input!]! ) {
+    insert_%s_owners(
         objects:$objects
     ) {
         returning {
@@ -122,9 +122,11 @@ def add_owner(user_id, id, type):
             user_id
         }
     }
-}'''.format(type, type, type)
-    owner_object={"users_id":user_id,"{}_id".format(type):id}
+}
+''' % (type, type, type)
+    owner_object = {"user_id": user_id, "{}_id".format(type): id}
     owner.append(owner_object)
+    print(owner, "query==", owner_insert_mutation)
     try:
         graphqlClient.execute(owner_insert_mutation, {
             'objects': list(owner)})
