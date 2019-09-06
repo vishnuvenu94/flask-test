@@ -280,12 +280,13 @@ def handle_problem_insert():
 def handle_problem_update():
     trigger_payload = request.json
     problem_id = trigger_payload["event"]["data"]["new"]["id"]
+    user_id=trigger_payload["event"]["data"]["new"]["user_id"]
 
     if (trigger_payload["event"]["op"] == "UPDATE" and not trigger_payload["event"]["data"]["new"]["is_draft"]):
 
         query = get_problem_query(problem_id)
         handle_notifications(trigger_payload, "problems",
-                             query, problem_id)
+                             query, problem_id,user_id)
 
     return "working"
 
